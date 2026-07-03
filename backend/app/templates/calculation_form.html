@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Создать расчёт{% endblock %}
+
+{% block content %}
+<h1>Создать расчёт</h1>
+
+<form>
+    <p>
+        <label>ФИО инженера</label><br>
+        <input type="text" name="engineer_name">
+    </p>
+
+    <p>
+        <label>Отчётный месяц</label><br>
+        <input type="text" name="month">
+    </p>
+
+    <p>
+        <label>Отчётный год</label><br>
+        <input type="number" name="year">
+    </p>
+
+    <p>
+        <label>Оклад</label><br>
+        <input type="number" name="salary">
+    </p>
+
+    <p>
+        <label>Максимальная премия</label><br>
+        <input type="number" name="max_bonus">
+    </p>
+
+    <p>
+        <label>План месяца</label><br>
+        <input type="number" name="month_plan">
+    </p>
+
+    <p>
+        <label>Факт месяца</label><br>
+        <input type="number" name="month_fact">
+    </p>
+
+    <p>
+        <label>План года</label><br>
+        <input type="number" name="year_plan">
+    </p>
+
+    <p>
+        <label>Факт года</label><br>
+        <input type="number" name="year_fact">
+    </p>
+
+    <button type="submit">Создать</button>
+</form>
+
+<p><a href="/">← Назад</a></p>
+{% endblock %}

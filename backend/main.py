@@ -16,3 +16,9 @@ async def index(request: Request):
         "index.html",
         {"request": request},
     )
+@app.get("/calculation", response_class=HTMLResponse)
+async def calculation(request: Request):
+    return templates.TemplateResponse(
+        "calculation_form.html",
+        {"request": request},
+    )
