@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Пространство BDM{% endblock %}
+
+{% block content %}
+<h1>{{ profile.bdm_name }}</h1>
+
+<p><strong>Город:</strong> {{ profile.city }}</p>
+
+<p>
+    <a href="/profiles/{{ profile.id }}/calculation/new">
+        <button>Создать расчёт</button>
+    </a>
+</p>
+
+<hr>
+
+<h2>Расчёты</h2>
+
+{% if calculations %}
+    {% for calculation in calculations %}
+        <div class="card" style="margin-bottom: 15px;">
+            <div class="card-title">{{ calculation.month }} {{ calculation.year }}</div>
+            <div>
+                СТМ: {{ "{:,.0f}".format(calculation.stm_fact).replace(",", " ") }}
+                /
+                {{ "{:,.0f}".format(calculation.stm_plan).replace(",", " ") }} ₽
+            </div>
+            <div>
+                Электрика: {{ "{:,.0f}".format(calculation.electrical_fact).replace(",", " ") }}
+                /
+                {{ "{:,.0f}".format(calculation.electrical_plan).replace(",", " ") }} ₽
+            </div>
+            <p>
+                <a href="/calculations/{{ calculation.id }}">
+                    <button>Открыть расчёт</button>
+                </a>
+            </p>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Пока расчётов нет.</p>
+{% endif %}
+
+<p><a href="/">← На главную</a></p>
+{% endblock %}

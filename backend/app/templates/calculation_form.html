@@ -5,11 +5,11 @@
 {% block content %}
 <h1>Создать расчёт</h1>
 
-<form method="post" action="/calculation">
-    <p>
-        <label>ФИО BDM</label><br>
-        <input type="text" name="bdm_name" required>
-    </p>
+<p><strong>BDM:</strong> {{ profile.bdm_name }}</p>
+<p><strong>Город:</strong> {{ profile.city }}</p>
+
+<form method="post" action="/calculations">
+    <input type="hidden" name="profile_id" value="{{ profile.id }}">
 
     <p>
         <label>Отчётный месяц</label><br>
@@ -21,19 +21,9 @@
         <input type="number" name="year" required>
     </p>
 
-    <p>
-        <label>Оклад</label><br>
-        <input type="number" name="salary" step="0.01" required>
-    </p>
-
-    <p>
-        <label>Премия</label><br>
-        <input type="number" name="bonus" step="0.01" required>
-    </p>
-
     <hr>
 
-    <h3>Годовые планы</h3>
+    <h3>Планы</h3>
 
     <p>
         <label>План СТМ</label><br>
@@ -52,8 +42,8 @@
         </label>
     </p>
 
-    <button type="submit">Создать</button>
+    <button type="submit">Создать расчёт</button>
 </form>
 
-<p><a href="/">← Назад</a></p>
+<p><a href="/profiles/{{ profile.id }}">← Назад</a></p>
 {% endblock %}

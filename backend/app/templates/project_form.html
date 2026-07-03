@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Добавить проект{% endblock %}
+
+{% block content %}
+<h1>Добавить проект</h1>
+
+<form method="post" action="/projects">
+    <input type="hidden" name="calculation_id" value="{{ calculation.id }}">
+
+    <p>
+        <label>Номер проекта</label><br>
+        <input type="text" name="project_number" required>
+    </p>
+
+    <p>
+        <label>Клиент</label><br>
+        <input type="text" name="client" required>
+    </p>
+
+    <p>
+        <label>Объект</label><br>
+        <input type="text" name="object_name" required>
+    </p>
+
+    <p>
+        <label>Менеджер</label><br>
+        <input type="text" name="manager">
+    </p>
+
+    <p>
+        <label>Подразделение</label><br>
+        <input type="text" name="department">
+    </p>
+
+    <button type="submit">Создать проект</button>
+</form>
+
+<p><a href="/calculations/{{ calculation.id }}">← Назад к расчёту</a></p>
+{% endblock %}

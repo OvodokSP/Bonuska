@@ -5,14 +5,26 @@
 {% block content %}
 <h1>Бонуска</h1>
 
-<h3>Автоматизация расчета бонусной ведомости</h3>
+<h3>Рабочие пространства BDM</h3>
+
+<p>
+    <a href="/profiles/new"><button>Создать BDM</button></a>
+</p>
 
 <hr>
 
-<button>Создать расчет</button>
-<button>Добавить счет</button>
-
-<hr>
-
-<p>Пока счетов нет.</p>
+{% if profiles %}
+    {% for profile in profiles %}
+        <div class="card" style="margin-bottom: 15px;">
+            <div class="card-title">BDM</div>
+            <div class="card-value">{{ profile.bdm_name }}</div>
+            <div><strong>Город:</strong> {{ profile.city }}</div>
+            <p>
+                <a href="/profiles/{{ profile.id }}"><button>Открыть пространство</button></a>
+            </p>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Пока нет созданных BDM.</p>
+{% endif %}
 {% endblock %}

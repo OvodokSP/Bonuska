@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Создать BDM{% endblock %}
+
+{% block content %}
+<h1>Создать BDM</h1>
+
+<form method="post" action="/profiles">
+    <p>
+        <label>ФИО BDM</label><br>
+        <input type="text" name="bdm_name" required>
+    </p>
+
+    <p>
+        <label>Город</label><br>
+        <input type="text" name="city" required>
+    </p>
+
+    <p>
+        <label>Оклад</label><br>
+        <input type="number" name="salary" step="0.01" required>
+    </p>
+
+    <p>
+        <label>Премия</label><br>
+        <input type="number" name="bonus" step="0.01" required>
+    </p>
+
+    <button type="submit">Создать</button>
+</form>
+
+<p><a href="/">← Назад</a></p>
+{% endblock %}

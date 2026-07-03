@@ -52,13 +52,17 @@
 .actions {
     margin: 25px 0;
 }
+
+.project-card {
+    margin-bottom: 15px;
+}
 </style>
 
 <div class="summary">
 
     <div class="card">
         <div class="card-title">BDM</div>
-        <div class="card-value">{{ calculation.bdm_name }}</div>
+        <div class="card-value">{{ profile.bdm_name }}</div>
     </div>
 
     <div class="card">
@@ -70,7 +74,7 @@
         <div class="card-title">Оклад</div>
         <div class="card-value">
             <span class="hidden-value">•••••• ₽</span>
-            <span class="real-value">{{ "{:,.0f}".format(calculation.salary).replace(",", " ") }} ₽</span>
+            <span class="real-value">{{ "{:,.0f}".format(profile.salary).replace(",", " ") }} ₽</span>
         </div>
         <button class="toggle-button" onclick="toggleSensitive('salary-card')">Показать / скрыть</button>
     </div>
@@ -79,7 +83,7 @@
         <div class="card-title">Премия</div>
         <div class="card-value">
             <span class="hidden-value">•••••• ₽</span>
-            <span class="real-value">{{ "{:,.0f}".format(calculation.bonus).replace(",", " ") }} ₽</span>
+            <span class="real-value">{{ "{:,.0f}".format(profile.bonus).replace(",", " ") }} ₽</span>
         </div>
         <button class="toggle-button" onclick="toggleSensitive('bonus-card')">Показать / скрыть</button>
     </div>
@@ -120,12 +124,33 @@
 <hr>
 
 <div class="actions">
-    <button>Добавить проект</button>
+    <a href="/calculations/{{ calculation.id }}/projects/new">
+        <button>Добавить проект</button>
+    </a>
 </div>
 
 <h2>Проекты</h2>
 
-<p>Пока проекты отсутствуют.</p>
+{% if calculation.projects %}
+    {% for project in calculation.projects %}
+        <div class="card project-card">
+            <div class="card-title">Проект {{ project.project_number }}</div>
+
+            <div><strong>Клиент:</strong> {{ project.client }}</div>
+            <div><strong>Объект:</strong> {{ project.object_name }}</div>
+            <div><strong>Менеджер:</strong> {{ project.manager }}</div>
+            <div><strong>Подразделение:</strong> {{ project.department }}</div>
+
+            <hr>
+
+            <button>Добавить счёт</button>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Пока проекты отсутствуют.</p>
+{% endif %}
+
+<p><a href="/profiles/{{ profile.id }}">← К пространству BDM</a></p>
 
 <script>
 function toggleSensitive(cardId) {
