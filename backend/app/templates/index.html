@@ -1,21 +1,18 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Бонуска</title>
-</head>
-<body style="font-family: Arial; margin: 40px;">
-    <h1>Бонуска</h1>
+{% extends "base.html" %}
 
-    <h3>Автоматизация расчета бонусной ведомости</h3>
+{% block title %}Бонуска{% endblock %}
 
-    <hr>
+{% block content %}
+<h1>Бонуска</h1>
 
-    <button>Создать расчет</button>
-    <button>Добавить счет</button>
+<h3>Автоматизация расчета бонусной ведомости</h3>
 
-    <hr>
+<hr>
 
-    <p>Пока счетов нет.</p>
-</body>
-</html>
+<button>Создать расчет</button>
+<button>Добавить счет</button>
+
+<hr>
+
+<p>Пока счетов нет.</p>
+{% endblock %}
