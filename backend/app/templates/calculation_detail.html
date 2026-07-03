@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Расчёт премии{% endblock %}
+
+{% block content %}
+<h1>Расчёт премии</h1>
+
+<style>
+.summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 14px;
+}
+
+.card-title {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.card-value {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.sensitive .real-value {
+    display: none;
+}
+
+.sensitive.visible .real-value {
+    display: inline;
+}
+
+.sensitive.visible .hidden-value {
+    display: none;
+}
+
+.toggle-button {
+    margin-top: 8px;
+    font-size: 12px;
+    padding: 5px 8px;
+}
+
+.actions {
+    margin: 25px 0;
+}
+</style>
+
+<div class="summary">
+
+    <div class="card">
+        <div class="card-title">BDM</div>
+        <div class="card-value">{{ calculation.bdm_name }}</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Период</div>
+        <div class="card-value">{{ calculation.month }} {{ calculation.year }}</div>
+    </div>
+
+    <div class="card sensitive" id="salary-card">
+        <div class="card-title">Оклад</div>
+        <div class="card-value">
+            <span class="hidden-value">•••••• ₽</span>
+            <span class="real-value">{{ "{:,.0f}".format(calculation.salary).replace(",", " ") }} ₽</span>
+        </div>
+        <button class="toggle-button" onclick="toggleSensitive('salary-card')">Показать / скрыть</button>
+    </div>
+
+    <div class="card sensitive" id="bonus-card">
+        <div class="card-title">Премия</div>
+        <div class="card-value">
+            <span class="hidden-value">•••••• ₽</span>
+            <span class="real-value">{{ "{:,.0f}".format(calculation.bonus).replace(",", " ") }} ₽</span>
+        </div>
+        <button class="toggle-button" onclick="toggleSensitive('bonus-card')">Показать / скрыть</button>
+    </div>
+
+    <div class="card">
+        <div class="card-title">План СТМ</div>
+        <div class="card-value">{{ "{:,.0f}".format(calculation.stm_plan).replace(",", " ") }} ₽</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Факт СТМ</div>
+        <div class="card-value">{{ "{:,.0f}".format(calculation.stm_fact).replace(",", " ") }} ₽</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">План Электрика</div>
+        <div class="card-value">{{ "{:,.0f}".format(calculation.electrical_plan).replace(",", " ") }} ₽</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Факт Электрика</div>
+        <div class="card-value">{{ "{:,.0f}".format(calculation.electrical_fact).replace(",", " ") }} ₽</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">План отдела продаж</div>
+        <div class="card-value">
+            {% if calculation.sales_department_plan_done %}
+                Выполнен
+            {% else %}
+                Не выполнен
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<hr>
+
+<div class="actions">
+    <button>Добавить проект</button>
+</div>
+
+<h2>Проекты</h2>
+
+<p>Пока проекты отсутствуют.</p>
+
+<script>
+function toggleSensitive(cardId) {
+    const card = document.getElementById(cardId);
+    card.classList.toggle("visible");
+}
+</script>
+
+{% endblock %}

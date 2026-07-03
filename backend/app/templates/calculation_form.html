@@ -1,54 +1,55 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 
 {% block title %}Создать расчёт{% endblock %}
 
 {% block content %}
 <h1>Создать расчёт</h1>
 
-<form>
+<form method="post" action="/calculation">
     <p>
-        <label>ФИО инженера</label><br>
-        <input type="text" name="engineer_name">
+        <label>ФИО BDM</label><br>
+        <input type="text" name="bdm_name" required>
     </p>
 
     <p>
         <label>Отчётный месяц</label><br>
-        <input type="text" name="month">
+        <input type="text" name="month" required>
     </p>
 
     <p>
         <label>Отчётный год</label><br>
-        <input type="number" name="year">
+        <input type="number" name="year" required>
     </p>
 
     <p>
         <label>Оклад</label><br>
-        <input type="number" name="salary">
+        <input type="number" name="salary" step="0.01" required>
     </p>
 
     <p>
-        <label>Максимальная премия</label><br>
-        <input type="number" name="max_bonus">
+        <label>Премия</label><br>
+        <input type="number" name="bonus" step="0.01" required>
+    </p>
+
+    <hr>
+
+    <h3>Годовые планы</h3>
+
+    <p>
+        <label>План СТМ</label><br>
+        <input type="number" name="stm_plan" step="0.01" required>
     </p>
 
     <p>
-        <label>План месяца</label><br>
-        <input type="number" name="month_plan">
+        <label>План Электрика</label><br>
+        <input type="number" name="electrical_plan" step="0.01" required>
     </p>
 
     <p>
-        <label>Факт месяца</label><br>
-        <input type="number" name="month_fact">
-    </p>
-
-    <p>
-        <label>План года</label><br>
-        <input type="number" name="year_plan">
-    </p>
-
-    <p>
-        <label>Факт года</label><br>
-        <input type="number" name="year_fact">
+        <label>
+            <input type="checkbox" name="sales_department_plan_done" value="true">
+            План отдела продаж выполнен
+        </label>
     </p>
 
     <button type="submit">Создать</button>
