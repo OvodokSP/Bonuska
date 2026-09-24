@@ -7,6 +7,12 @@ on:
     paths:
       - 'bootstrap/v0.17.31-a03/**'
       - '.github/workflows/bootstrap-v01731-a03.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'bootstrap/v0.17.31-a03/**'
+      - '.github/workflows/bootstrap-v01731-a03.yml'
   workflow_dispatch:
 
 jobs:
