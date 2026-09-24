@@ -52,9 +52,26 @@ $BackupDir = Join-Path $Root "local_backups\\before_v0.17.31_a03_$Stamp"
 New-Item -ItemType Directory -Force -Path $BackupDir | Out-Null
 Copy-Item -LiteralPath $Parser -Destination (Join-Path $BackupDir 'pdf_invoice.py') -Force
 
-$AppendText = [IO.File]::ReadAllText($AppendFile)
-$Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-[IO.File]::AppendAllText($Parser, [Environment]::NewLine + $AppendText, $Utf8NoBom)
+$BaseBytes = [IO.File]::ReadAllBytes($Parser)
+$AppendBytes = [IO.File]::ReadAllBytes($AppendFile)
+
+# Normalize the bootstrap source file to LF exactly like the Linux installer.
+$AppendText = [Text.Encoding]::UTF8.GetString($AppendBytes).Replace("`r`n", "`n")
+$AppendBytes = (New-Object System.Text.UTF8Encoding($false)).GetBytes($AppendText)
+
+$Lf = [byte]10
+$NeedsLf = ($BaseBytes.Length -eq 0 -or $BaseBytes[$BaseBytes.Length - 1] -ne $Lf)
+
+$Stream = [IO.File]::Open($Parser, [IO.FileMode]::Append, [IO.FileAccess]::Write, [IO.FileShare]::None)
+try {
+    if ($NeedsLf) {
+        $Stream.WriteByte($Lf)
+    }
+    $Stream.Write($AppendBytes, 0, $AppendBytes.Length)
+}
+finally {
+    $Stream.Dispose()
+}
 
 $UpdatedText = [IO.File]::ReadAllText($Parser)
 if (-not $UpdatedText.Contains($Marker)) {
