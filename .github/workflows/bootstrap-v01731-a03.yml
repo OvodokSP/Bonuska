@@ -1,0 +1,64 @@
+name: Bootstrap v0.17.31 a03 checks
+
+on:
+  push:
+    branches:
+      - bootstrap/v0.17.31-a03-update-agent
+    paths:
+      - 'bootstrap/v0.17.31-a03/**'
+      - '.github/workflows/bootstrap-v01731-a03.yml'
+  workflow_dispatch:
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bash syntax
+        run: |
+          set -euo pipefail
+          bash -n bootstrap/v0.17.31-a03/install-bootstrap.sh
+          bash -n bootstrap/v0.17.31-a03/verify-bootstrap.sh
+          bash -n bootstrap/v0.17.31-a03/rollback-bootstrap.sh
+
+      - name: Python syntax
+        run: |
+          set -euo pipefail
+          python -m py_compile bootstrap/v0.17.31-a03/bonuska-update-agent.py
+          python -m py_compile bootstrap/v0.17.31-a03/pdf_invoice_v01731_a03_append.py
+
+      - name: PowerShell syntax
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          foreach ($Path in @(
+            'bootstrap/v0.17.31-a03/sign-update.ps1',
+            'bootstrap/v0.17.31-a03/sync-local.ps1'
+          )) {
+            $Tokens = $null
+            $Errors = $null
+            [void][System.Management.Automation.Language.Parser]::ParseFile(
+              (Resolve-Path $Path),
+              [ref]$Tokens,
+              [ref]$Errors
+            )
+            if ($Errors.Count -gt 0) {
+              $Errors | Format-List | Out-String | Write-Error
+              throw "PowerShell syntax failed: $Path"
+            }
+            Write-Host "$Path = PASS"
+          }
+
+      - name: Security contract scan
+        run: |
+          set -euo pipefail
+          grep -q '127.0.0.1' bootstrap/v0.17.31-a03/bonuska-update-agent.py
+          grep -q 'HMAC signature verification failed' bootstrap/v0.17.31-a03/bonuska-update-agent.py
+          grep -q 'auth_request /__bonuska_update_auth' bootstrap/v0.17.31-a03/bonuska-update-agent.nginx
+          ! grep -R --line-number -E 'shell=True|os\.system\(|eval\(|exec\(' bootstrap/v0.17.31-a03/bonuska-update-agent.py
+
+      - name: Exact base contract
+        run: |
+          set -euo pipefail
+          grep -q '43139dcdfd543197961369c2d3163a38ae763a4be8b642d186779b4bd8d36b41'             bootstrap/v0.17.31-a03/install-bootstrap.sh
