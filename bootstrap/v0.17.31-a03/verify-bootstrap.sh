@@ -125,10 +125,10 @@ print("LP109691_REGRESSION=PASS")
 PY
 fi
 
-HTTP_CODE="$(curl -ksS -o /dev/null -w '%{http_code}' --max-time 10 "https://${PUBLIC_IP}/system/update-agent/" || true)"
+HTTP_CODE="$(curl -ksS -o /dev/null -w '%{http_code}' --max-time 10 "https://${PUBLIC_IP}/system/update-center/" || true)"
 printf 'UPDATE_AGENT_ANON_HTTP=%s\n' "${HTTP_CODE}"
 [[ "${HTTP_CODE}" != "200" ]] || die "anonymous browser request unexpectedly received 200"
 printf 'UPDATE_AGENT_AUTH_GATE=PASS\n'
 
-printf 'UPDATE_AGENT_URL=https://%s/system/update-agent/\n' "${PUBLIC_IP}"
+printf 'UPDATE_AGENT_URL=https://%s/system/update-center/\n' "${PUBLIC_IP}"
 printf 'BOOTSTRAP_VERIFY=PASS\n'
