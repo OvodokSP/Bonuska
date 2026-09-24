@@ -1,0 +1,42 @@
+{
+  "project": "Bonuska",
+  "bootstrap_revision": "v0.17.31-a03-bootstrap-r01",
+  "purpose": [
+    "pdf-headerless-continuation-corrective",
+    "signed-host-update-agent-bootstrap"
+  ],
+  "base": {
+    "version": "0.17.31",
+    "fingerprint": "43139dcdfd543197961369c2d3163a38ae763a4be8b642d186779b4bd8d36b41",
+    "sqlite_schema": 29,
+    "routes": 138
+  },
+  "target_contract": {
+    "version": "0.17.31",
+    "sqlite_schema": 29,
+    "routes": 138,
+    "target_fingerprint": "reported_by_install_bootstrap_after_exact_source_patch"
+  },
+  "parser_regressions": {
+    "ВР016877": {
+      "required": true,
+      "items": 482,
+      "amount": "93677502.64",
+      "required_rows": [332, 357]
+    },
+    "ЛП109691": {
+      "required": false,
+      "recommended": true,
+      "items": 32,
+      "amount": "7989783.44"
+    }
+  },
+  "update_agent": {
+    "listen": "127.0.0.1:8765",
+    "web_path": "/system/update-center/",
+    "browser_auth": "nginx auth_request -> /system/command-center",
+    "package_authorization": "HMAC-SHA256",
+    "arbitrary_shell": false,
+    "corporate_default": "not installed / self-update remains disabled unless separately approved"
+  }
+}
