@@ -193,6 +193,27 @@ def _safe_extract(zip_path: Path, target: Path) -> Path:
 
 
 def _verify_internal_checksums(package_dir: Path, log_path: Path) -> None:
+    manifest = package_dir / "SHA256SUMS.txt"
+    package_root = package_dir.resolve()
+
+    for raw in manifest.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+
+        parts = line.split(maxsplit=1)
+        if len(parts) != 2 or not SHA_RE.fullmatch(parts[0]):
+            raise RuntimeError("invalid SHA256SUMS entry")
+
+        rel_text = parts[1].lstrip("*").strip()
+        rel = PurePosixPath(rel_text)
+        if rel.is_absolute() or ".." in rel.parts or not rel.parts:
+            raise RuntimeError(f"unsafe SHA256SUMS path: {rel_text!r}")
+
+        resolved = (package_dir / Path(*rel.parts)).resolve()
+        if resolved != package_root and package_root not in resolved.parents:
+            raise RuntimeError(f"SHA256SUMS path escaped package: {rel_text!r}")
+
     result = subprocess.run(
         ["sha256sum", "-c", "SHA256SUMS.txt"],
         cwd=str(package_dir),
