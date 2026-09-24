@@ -31,7 +31,7 @@ The agent therefore runs as a separate host systemd service. The browser-facing
 path is:
 
 ```text
-https://<Bonuska host>/system/update-agent/
+https://<Bonuska host>/system/update-center/
 ```
 
 Nginx protects that path with `auth_request` against the existing
@@ -152,7 +152,7 @@ This creates/validates:
 Then login to Bonuska as System Administrator and open:
 
 ```text
-/system/update-agent/
+/system/update-center/
 ```
 
 Upload ZIP + SHA + SIG. The agent performs the fixed flow:
