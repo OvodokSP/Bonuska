@@ -85,7 +85,21 @@ BOOTSTRAP_MUTATED=1
 printf 'BOOTSTRAP_BACKUP=%s\n' "${BACKUP_DIR}"
 
 log "Applying strict headerless continuation-page safeguard"
-cat "${APPEND_FILE}" >> "${PARSER}"
+# Keep server/local source bytes deterministic: ensure exactly one LF boundary,
+# then append the LF-normalized corrective block.
+python3 - "${PARSER}" "${APPEND_FILE}" <<'PY'
+from pathlib import Path
+import sys
+
+parser = Path(sys.argv[1])
+append = Path(sys.argv[2])
+base = parser.read_bytes()
+extra = append.read_bytes().replace(b"\r\n", b"\n")
+
+if not base.endswith(b"\n"):
+    base += b"\n"
+parser.write_bytes(base + extra)
+PY
 python3 -m py_compile "${PARSER}"
 grep -q 'BONUSKA_V01731_A03_HEADERLESS_CONTINUATION_END' "${PARSER}"
 printf 'PARSER_SOURCE_PATCH=PASS\n'
