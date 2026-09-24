@@ -68,3 +68,35 @@ jobs:
         run: |
           set -euo pipefail
           grep -q '43139dcdfd543197961369c2d3163a38ae763a4be8b642d186779b4bd8d36b41'             bootstrap/v0.17.31-a03/install-bootstrap.sh
+
+
+      - name: Build offline bootstrap bundle
+        run: |
+          set -euo pipefail
+          PKG="Bonuska_Bootstrap_v0.17.31_a03_r01"
+          rm -rf "dist/$PKG"
+          mkdir -p "dist/$PKG"
+          cp -a bootstrap/v0.17.31-a03/. "dist/$PKG/"
+          (
+            cd "dist/$PKG"
+            find . -type f ! -name SHA256SUMS.txt -print0 \
+              | sort -z \
+              | xargs -0 sha256sum > SHA256SUMS.txt
+            sha256sum -c SHA256SUMS.txt
+          )
+          (
+            cd dist
+            zip -q -r "$PKG.zip" "$PKG"
+            sha256sum "$PKG.zip" > "$PKG.zip.sha256"
+            sha256sum -c "$PKG.zip.sha256"
+          )
+
+      - name: Upload offline bootstrap bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: Bonuska_Bootstrap_v0.17.31_a03_r01
+          path: |
+            dist/Bonuska_Bootstrap_v0.17.31_a03_r01.zip
+            dist/Bonuska_Bootstrap_v0.17.31_a03_r01.zip.sha256
+          if-no-files-found: error
+          retention-days: 30
