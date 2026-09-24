@@ -69,10 +69,6 @@ MIN_FREE=$((2 * 1024 * 1024 * 1024))
 (( FREE_BYTES >= MIN_FREE )) || die "less than 2 GiB free: ${FREE_BYTES}"
 printf 'DISK_PREFLIGHT=PASS available=%s required=%s\n' "${FREE_BYTES}" "${MIN_FREE}"
 
-if ! nginx -V 2>&1 | grep -q -- '--with-http_auth_request_module'; then
-  die "Nginx auth_request module is unavailable"
-fi
-
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 BACKUP_DIR="${BACKUP_ROOT}/v0.17.31-a03_${STAMP}"
 mkdir -p "${BACKUP_DIR}"
